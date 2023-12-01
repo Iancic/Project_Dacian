@@ -17,4 +17,6 @@ public class Unit : ScriptableObject
     public int recruitValue;
     public int hitpoints;
     public float attackCooldown;
+
+    public int damagePower;
 }

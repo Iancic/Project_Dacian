@@ -29,6 +29,8 @@ public class UnitRTS : MonoBehaviour
 
     private bool isProcessingCollision;
 
+    public int damagePower;
+
     public void LoadUnitData()
     {
         moveSpeed = unit.movementSpeed;
@@ -38,6 +40,7 @@ public class UnitRTS : MonoBehaviour
         recruitValue = unit.recruitValue;
         hitpoints = unit.hitpoints;
         attackCooldown = unit.attackCooldown;
+        damagePower = unit.damagePower;
     }
 
     private void GetComponents()
@@ -79,7 +82,7 @@ public class UnitRTS : MonoBehaviour
 
     private void Update()
     {
-        float fillAmount = hitpoints / maxHitpoints;
+        float fillAmount = (float)hitpoints / maxHitpoints;
         healthBarImage.fillAmount = fillAmount;
 
         if (isMoving == false)
@@ -144,7 +147,7 @@ public class UnitRTS : MonoBehaviour
         while (enemy_script.hitpoints > 0)
         {
             enemy_script.isMoving = false;
-            enemy_script.hitpoints -= 1;
+            enemy_script.hitpoints -= damagePower;
 
             yield return new WaitForSeconds(attackCooldown);
         }
