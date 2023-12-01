@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,8 +16,9 @@ public class EnemyController : MonoBehaviour
     private Vector3 targetPosition;
 
     private GameObject king;
+    public Image healthBarImage;
 
-    public int hitpoints = 3;
+    public int hitpoints = 3, maxHitpoints;
 
     void Awake()
     {
@@ -27,11 +28,15 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
+        maxHitpoints = hitpoints;
         king = GameObject.Find("King");
     }
 
     void Update()
     {
+        float fillAmount = (float)hitpoints / maxHitpoints;
+        healthBarImage.fillAmount = fillAmount;
+
         targetPosition = king.transform.position;
 
         if (isMoving)

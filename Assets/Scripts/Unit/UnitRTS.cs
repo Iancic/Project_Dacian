@@ -2,6 +2,8 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class UnitRTS : MonoBehaviour
 {
@@ -19,8 +21,9 @@ public class UnitRTS : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private GameObject selectedGameObject;
+    public Image healthBarImage;
 
-    private int hitpoints;
+    private int hitpoints, maxHitpoints;
 
     private float attackCooldown;
 
@@ -54,6 +57,11 @@ public class UnitRTS : MonoBehaviour
         //At default set it to off
     }
 
+    private void Start()
+    {
+        maxHitpoints = hitpoints;
+    }
+
     public void SetSelectedVisible(bool visible)
     {
         selectedGameObject.SetActive(visible);
@@ -71,6 +79,9 @@ public class UnitRTS : MonoBehaviour
 
     private void Update()
     {
+        float fillAmount = hitpoints / maxHitpoints;
+        healthBarImage.fillAmount = fillAmount;
+
         if (isMoving == false)
         {
             animator.SetBool("isMovingAnim", false);
