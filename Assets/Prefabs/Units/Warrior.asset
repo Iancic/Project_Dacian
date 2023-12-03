@@ -20,3 +20,4 @@ MonoBehaviour:
   recruitValue: 100
   hitpoints: 5
   attackCooldown: 1
+  damagePower: 1

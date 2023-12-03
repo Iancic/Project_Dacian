@@ -14,7 +14,7 @@ public class UnitRTS : MonoBehaviour
 
     private Vector3 targetPosition; 
 
-    private bool isMoving;
+    public bool isMoving;
 
     public int recruitValue;
 
@@ -23,7 +23,7 @@ public class UnitRTS : MonoBehaviour
     private GameObject selectedGameObject;
     public Image healthBarImage;
 
-    private int hitpoints, maxHitpoints;
+    public int hitpoints, maxHitpoints;
 
     private float attackCooldown;
 
@@ -51,6 +51,8 @@ public class UnitRTS : MonoBehaviour
 
     private void Awake()
     {
+        maxHitpoints = hitpoints;
+
         GetComponents();
         //loads all components form the object
 
@@ -67,7 +69,10 @@ public class UnitRTS : MonoBehaviour
 
     public void SetSelectedVisible(bool visible)
     {
-        selectedGameObject.SetActive(visible);
+        if (selectedGameObject != null)
+        {
+            selectedGameObject.SetActive(visible);
+        }
     }
     //Sets it on or off
 
@@ -108,6 +113,13 @@ public class UnitRTS : MonoBehaviour
         {
             spriteRenderer.flipX = true; // Moving left
         }
+
+        if (hitpoints <= 0)
+        {
+            animator.SetBool("Death", true);
+            Destroy(this.gameObject, 0.5f);
+            //as long as death animation
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -136,11 +148,7 @@ public class UnitRTS : MonoBehaviour
 
     IEnumerator Damage(Collider2D collision)
     {
-
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, collision.gameObject.transform.position.y, this.gameObject.transform.position.z);
-
-        //if (this.gameObject.transform.position.x - collision.gameObject.transform.position.x < 1f)
-            //this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x + 1f, this.gameObject.transform.position.y, this.gameObject.transform.position.z);
 
         EnemyController enemy_script = collision.gameObject.GetComponent<EnemyController>();
 

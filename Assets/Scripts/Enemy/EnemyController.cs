@@ -20,6 +20,11 @@ public class EnemyController : MonoBehaviour
 
     public int hitpoints = 3, maxHitpoints;
 
+    private bool isProcessingCollision;
+
+    public int damagePower = 1;
+    public float attackCooldown = 2f;
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -63,6 +68,80 @@ public class EnemyController : MonoBehaviour
             Destroy(this.gameObject, 0.5f);
             //as long as death animation
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isProcessingCollision)
+        {
+            return;
+        }
+
+        if (collision.CompareTag("King"))
+        {
+            isProcessingCollision = true;
+            isMoving = false;
+            animator.SetBool("isAttacking", true);
+            StartCoroutine(Damage_King(collision));
+        }
+
+        if (collision.CompareTag("Unit"))
+        {
+            isProcessingCollision = true;
+            isMoving = false;
+            animator.SetBool("isAttacking", true);
+            StartCoroutine(Damage_Unit(collision));
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("King"))
+        {
+            isProcessingCollision = false;
+            isMoving = true;
+            StopCoroutine(Damage_King(collision));
+        }
+
+        if (collision.CompareTag("King"))
+        {
+            isProcessingCollision = false;
+            isMoving = true;
+            StopCoroutine(Damage_Unit(collision));
+        }
+    }
+
+    IEnumerator Damage_King(Collider2D collision)
+    {
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, collision.gameObject.transform.position.y, this.gameObject.transform.position.z);
+
+        KingController king_script = collision.gameObject.GetComponent<KingController>();
+
+        while (king_script.hitpoints > 0)
+        {
+            king_script.hitpoints -= damagePower;
+
+            yield return new WaitForSeconds(attackCooldown);
+        }
+
+        animator.SetBool("isAttacking", false);
+    }
+
+    IEnumerator Damage_Unit(Collider2D collision)
+    {
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, collision.gameObject.transform.position.y, this.gameObject.transform.position.z);
+
+        UnitRTS unit_script = collision.gameObject.GetComponent<UnitRTS>();
+
+        while (unit_script.hitpoints > 0)
+        {
+            unit_script.isMoving = false;
+            unit_script.hitpoints -= damagePower;
+
+            yield return new WaitForSeconds(attackCooldown);
+        }
+
+        animator.SetBool("isAttacking", false);
     }
 
 }

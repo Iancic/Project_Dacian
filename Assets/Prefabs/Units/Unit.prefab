@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2480411588608261311}
   m_Layer: 0
   m_Name: Unit
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,8 +52,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
+  isMoving: 0
   recruitValue: 0
   healthBarImage: {fileID: 3104245502494367407}
+  hitpoints: 0
+  maxHitpoints: 0
+  damagePower: 0
 --- !u!212 &6005383783177290384
 SpriteRenderer:
   m_ObjectHideFlags: 0

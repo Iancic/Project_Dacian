@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KingController : MonoBehaviour
 {
@@ -11,10 +12,15 @@ public class KingController : MonoBehaviour
     private Vector2 waypoint;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
-    private Coroutine moveCoroutine;
+    public Coroutine moveCoroutine;
+
+    public int hitpoints = 10, maxHitpoints;
+    public Image healthBarImage;
+    public bool isMoving = true;
 
     private void Awake()
     {
+        maxHitpoints = hitpoints;
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
@@ -26,30 +32,33 @@ public class KingController : MonoBehaviour
 
     void Update()
     {
-        if (Vector2.Distance(transform.position, waypoint) > range)
-        {
-            // Move towards the waypoint
-            transform.position = Vector2.MoveTowards(transform.position, waypoint, speed * Time.deltaTime);
+        float fillAmount = (float)hitpoints / maxHitpoints;
+        healthBarImage.fillAmount = fillAmount;
 
-            // Check direction for sprite flipping
-            if (waypoint.x > transform.position.x)
+            if (Vector2.Distance(transform.position, waypoint) > range)
             {
-                spriteRenderer.flipX = false; // Moving right
-            }
-            else if (waypoint.x < transform.position.x)
-            {
-                spriteRenderer.flipX = true; // Moving left
-            }
+                // Move towards the waypoint
+                transform.position = Vector2.MoveTowards(transform.position, waypoint, speed * Time.deltaTime);
 
-            // Set walking animation
-            animator.SetBool("isWalking", true);
-        }
-        else if (moveCoroutine == null)
-        {
-            // Stop walking animation and set new destination
-            animator.SetBool("isWalking", false);
-            moveCoroutine = StartCoroutine(SetNewDestination());
-        }
+                // Check direction for sprite flipping
+                if (waypoint.x > transform.position.x)
+                {
+                    spriteRenderer.flipX = false; // Moving right
+                }
+                else if (waypoint.x < transform.position.x)
+                {
+                    spriteRenderer.flipX = true; // Moving left
+                }
+
+                // Set walking animation
+                animator.SetBool("isWalking", true);
+            }
+            else if (moveCoroutine == null)
+            {
+                // Stop walking animation and set new destination
+                animator.SetBool("isWalking", false);
+                moveCoroutine = StartCoroutine(SetNewDestination());
+            }
     }
 
     private IEnumerator SetNewDestination()

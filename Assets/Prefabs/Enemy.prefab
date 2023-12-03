@@ -54,6 +54,8 @@ MonoBehaviour:
   healthBarImage: {fileID: 4831985785294204770}
   hitpoints: 3
   maxHitpoints: 0
+  damagePower: 1
+  attackCooldown: 2
 --- !u!212 &6005383783177290384
 SpriteRenderer:
   m_ObjectHideFlags: 0

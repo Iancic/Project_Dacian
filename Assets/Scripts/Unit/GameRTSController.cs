@@ -62,6 +62,22 @@ public class GameRTSController : MonoBehaviour
                 }
             }
 
+            // Create a temporary list to store non-null units
+            List<UnitRTS> nonNullUnits = new List<UnitRTS>();
+
+            foreach (Collider2D collider2d in collider2DArray)
+            {
+                UnitRTS unitRTS = collider2d.GetComponent<UnitRTS>();
+                if (unitRTS != null)
+                {
+                    unitRTS.SetSelectedVisible(true);
+                    nonNullUnits.Add(unitRTS);
+                }
+            }
+
+            // Replace the original list with the non-null list
+            selectedUnitRTSList = nonNullUnits;
+
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -97,6 +113,16 @@ public class GameRTSController : MonoBehaviour
                 //Aici muta jucatorii in pozitiile din lista de pozitii ca sa nu dea overlap
                 targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
                 //muta pozitia de index pentru urmatorul
+            }
+
+            foreach (UnitRTS unitRTS in selectedUnitRTSList)
+            {
+                // Check if the unit is not null before accessing it
+                if (unitRTS != null)
+                {
+                    unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                    // ... existing code ...
+                }
             }
         }
     }
