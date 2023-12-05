@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -8,51 +9,56 @@ public class EnemySpawner : MonoBehaviour
 
     public Vector3 spawnLoc;
 
+    public static int rounds = 0;
+
     void Start()
     {
-        StartCoroutine(SpawnTop());
-        StartCoroutine(SpawnBot());
-        StartCoroutine(SpawnLeft());
-        StartCoroutine(SpawnRight());
+        StartCoroutine(StartWAVE());
     }
 
-    public IEnumerator SpawnTop()
-    {
-        while (true) 
-        {
-            yield return new WaitForSeconds(Random.Range(9f, 14f));
-            spawnLoc = new Vector3 (Random.Range(-10f, 10f), 6f);
-            Instantiate(enemy, spawnLoc, Quaternion.identity);
-        }
-    }
-
-    public IEnumerator SpawnBot()
+    public IEnumerator StartWAVE()
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(9f, 14f));
-            spawnLoc = new Vector3(Random.Range(-10f, 10f), -6f);
-            Instantiate(enemy, spawnLoc, Quaternion.identity);
-        }
-    }
+            bool spawnDir = Random.value > 0.5;
+            //returns true or false. 50/50 chance
+            //THIS IS BASED ON DIFFICULTY TOO
 
-    public IEnumerator SpawnLeft()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(9f, 14f));
-            spawnLoc = new Vector3(-10, Random.Range(-6f, 6f));
-            Instantiate(enemy, spawnLoc, Quaternion.identity);
-        }
-    }
+            if (spawnDir)
+            {
+                //Top
+                spawnLoc = new Vector3(Random.Range(-10f, 10f), 6f);
+                Instantiate(enemy, spawnLoc, Quaternion.identity);
+            }
 
-    public IEnumerator SpawnRight()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(9f, 14f));
-            spawnLoc = new Vector3(10, Random.Range(-6f, 6f));
-            Instantiate(enemy, spawnLoc, Quaternion.identity);
+            spawnDir = Random.value > 0.5;
+            if (spawnDir)
+            {
+                //Bot
+                spawnLoc = new Vector3(Random.Range(-10f, 10f), -6f);
+                Instantiate(enemy, spawnLoc, Quaternion.identity);
+            }
+
+            spawnDir = Random.value > 0.5;
+            if (spawnDir)
+            {
+                //Left
+                spawnLoc = new Vector3(-10, Random.Range(-6f, 6f));
+                Instantiate(enemy, spawnLoc, Quaternion.identity);
+            }
+
+            spawnDir = Random.value > 0.5;
+            if (spawnDir)
+            {
+                //Right
+                spawnLoc = new Vector3(10, Random.Range(-6f, 6f));
+                Instantiate(enemy, spawnLoc, Quaternion.identity);
+            }
+
+            rounds++;
+
+            yield return new WaitForSeconds(Random.Range(8f, 12f));
+            //Based On Difficulty
         }
     }
 }
